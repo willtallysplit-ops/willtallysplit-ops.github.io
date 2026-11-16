@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Join a group on TallySplit</title>
+    <meta name="description" content="You've been invited to a group on TallySplit." />
+    <link rel="icon" href="../favicon.png" />
+    <style>
+      :root {
+        --bg: #f6f7f3;
+        --card: #ffffff;
+        --text: #15201b;
+        --muted: #57645d;
+        --primary: #1b7d52;
+        --hero: #156a45;
+        --on-hero: #ffffff;
+        --border: #dfe5e0;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0d1411;
+          --card: #16201b;
+          --text: #eaf1ed;
+          --muted: #a3b0a9;
+          --primary: #4acb8d;
+          --hero: #143f2d;
+          --on-hero: #eaf1ed;
+          --border: #26332c;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--text);
+        font:
+          16px/1.5 system-ui,
+          -apple-system,
+          'Segoe UI',
+          Roboto,
+          sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 16px;
+      }
+      main {
+        width: 100%;
+        max-width: 420px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 32px 24px;
+        text-align: center;
+      }
+      .mark {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 16px;
+        border-radius: 18px;
+        background: var(--hero);
+        color: var(--on-hero);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 28px;
+        letter-spacing: -1px;
+      }
+      h1 {
+        font-size: 24px;
+        line-height: 1.25;
+        margin: 0 0 8px;
+      }
+      p {
+        color: var(--muted);
+        margin: 0 0 16px;
+      }
+      .code {
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: 4px;
+        margin: 8px 0 24px;
+        color: var(--text);
+        user-select: all;
+      }
+      .button {
+        display: block;
+        width: 100%;
+        padding: 14px 16px;
+        border-radius: 999px;
+        background: var(--primary);
+        color: #fff;
+        font-weight: 600;
+        text-decoration: none;
+        margin-bottom: 12px;
+      }
+      @media (prefers-color-scheme: dark) {
+        .button {
+          color: #0d1411;
+        }
+      }
+      .steps {
+        text-align: left;
+        margin: 24px 0 0;
+        padding: 16px 16px 16px 36px;
+        border-radius: 16px;
+        background: var(--bg);
+        color: var(--muted);
+      }
+      .steps li + li {
+        margin-top: 6px;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="mark" aria-hidden="true">TS</div>
+
+      <section id="invite" class="hidden">
+        <h1>You're invited to a group on TallySplit</h1>
+        <p>TallySplit keeps track of shared expenses. Your invite code:</p>
+        <div class="code" id="code" aria-label="Invite code"></div>
+        <a class="button" id="open" href="#">Open in TallySplit</a>
+        <ol class="steps">
+          <li>
+            Don't have TallySplit yet? It isn't in the app stores yet. Ask the person who invited
+            you how to get it.
+          </li>
+          <li>
+            Then open TallySplit, tap <strong>Join with a code</strong> and enter the code above.
+          </li>
+          <li>Invites last 24 hours. If it has expired, ask for a new one.</li>
+        </ol>
+      </section>
+
+      <section id="missing" class="hidden">
+        <h1>This invite link is incomplete</h1>
+        <p>
+          Ask the person who invited you to send the link again, or to tell you the 8-character
+          code.
+        </p>
+      </section>
+    </main>
+
+    <script>
+      (function () {
+        var params = new URLSearchParams(location.search);
+        var raw = (params.get('code') || '').toUpperCase();
+        var code = /^[A-Z0-9-]{4,20}$/.test(raw) ? raw : '';
+        if (!code) {
+          document.getElementById('missing').classList.remove('hidden');
+          return;
+        }
+        document.getElementById('invite').classList.remove('hidden');
+        document.getElementById('code').textContent = code;
+        document.title = 'Join with code ' + code + ' on TallySplit';
+        var appLink = 'tallysplit://join/' + encodeURIComponent(code);
+        // Android: an intent link opens the app if it's installed and does nothing otherwise.
+        var isAndroid = /Android/i.test(navigator.userAgent);
+        document.getElementById('open').href = isAndroid
+          ? 'intent://join/' +
+            encodeURIComponent(code) +
+            '#Intent;scheme=tallysplit;package=com.tallysplit.app;end'
+          : appLink;
+      })();
+    </script>
+  </body>
+</html>

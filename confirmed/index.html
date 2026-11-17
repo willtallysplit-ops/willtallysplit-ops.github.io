@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Email confirmed · TallySplit</title>
+    <meta name="description" content="Your TallySplit email address is confirmed." />
+    <link rel="icon" href="../favicon.png" />
+    <link rel="stylesheet" href="../legal.css" />
+  </head>
+  <body>
+    <main>
+      <p class="brand"><a href="../">TallySplit</a></p>
+      <h1 id="title">Your email is confirmed</h1>
+      <p id="message">
+        Thanks! Go back to the TallySplit app and sign in with your email and password.
+      </p>
+    </main>
+    <script>
+      // Supabase sends people here after they tap the link in the sign-up email (Stage 11).
+      // A used or expired link arrives with an error in the address instead.
+      var params = new URLSearchParams(location.hash.slice(1) + '&' + location.search.slice(1));
+      if (params.get('error') || params.get('error_code')) {
+        document.getElementById('title').textContent = 'That link has expired';
+        document.getElementById('message').textContent =
+          'It may have been used already. Open TallySplit and try signing in. If your email ' +
+          "isn't confirmed yet, sign up again with the same email to get a new link.";
+      }
+      // Tidy the address so the one-time code isn't left in the browser's history.
+      if (location.search || location.hash) history.replaceState(null, '', location.pathname);
+    </script>
+  </body>
+</html>
